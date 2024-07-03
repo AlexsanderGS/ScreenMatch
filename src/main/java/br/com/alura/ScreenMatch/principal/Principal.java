@@ -6,6 +6,7 @@ import br.com.alura.ScreenMatch.model.DadosEpisodios;
 import br.com.alura.ScreenMatch.model.DadosSerie;
 import br.com.alura.ScreenMatch.model.DadosTemporadas;
 import br.com.alura.ScreenMatch.model.Episodio;
+import org.springframework.cglib.core.Local;
 
 import java.sql.SQLOutput;
 import java.time.LocalDate;
@@ -65,17 +66,17 @@ public class Principal {
 
         episodios.forEach(System.out::println);
 
-        System.out.println("Digite um trecho do titulo episódio para procurar: ");
-        var trechoTitulo = sc.nextLine();
-        Optional<Episodio> episodioBuscado = episodios.stream()
-                .filter(e -> e.getTitulo().toLowerCase().contains(trechoTitulo.toLowerCase()))
-                .findFirst();
-        if (episodioBuscado.isPresent()) {
-            System.out.println("Episódio encontrado!");
-            System.out.println("Temporada: " + episodioBuscado.get().getTemporada());
-        } else {
-            System.out.println("Episódio não encontrado!");
-        }
+//        System.out.println("Digite um trecho do titulo episódio para procurar: ");
+//        var trechoTitulo = sc.nextLine();
+//        Optional<Episodio> episodioBuscado = episodios.stream()
+//                .filter(e -> e.getTitulo().toLowerCase().contains(trechoTitulo.toLowerCase()))
+//                .findFirst();
+//        if (episodioBuscado.isPresent()) {
+//            System.out.println("Episódio encontrado!");
+//            System.out.println("Temporada: " + episodioBuscado.get().getTemporada());
+//        } else {
+//            System.out.println("Episódio não encontrado!");
+//        }
 //
 //        System.out.println("Digite um ano para ver os episodios lançados: ");
 //        var ano = sc.nextInt();
@@ -89,5 +90,13 @@ public class Principal {
 //                .forEach(e -> System.out.println("Temporada: " + e.getTemporada() +
 //                                                  " Episodio: " + e.getTitulo() +
 //                                                  " Data de Lançamento: " + e.getDataLancamento().format(formataData)));
-        }
+
+        Map<Integer, Double> avaliaPorTemporada = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                        Collectors.averagingDouble(Episodio::getAvaliacao)));
+
+        System.out.println(avaliaPorTemporada);
+
+    }
 }

@@ -4,10 +4,13 @@ import br.com.alura.ScreenMatch.Service.ConsumoAPI;
 import br.com.alura.ScreenMatch.Service.ConverteDados;
 import br.com.alura.ScreenMatch.model.DadosSerie;
 import br.com.alura.ScreenMatch.model.DadosTemporadas;
+import br.com.alura.ScreenMatch.model.Serie;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -84,6 +87,13 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas(){
-        dadosSeries.forEach(System.out::println);
+
+        List<Serie> series = new ArrayList<>();
+        series = dadosSeries.stream()
+                        .map(d -> new Serie(d))
+                                .collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 }
